@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EuroFoco Pro | Sistema Integrado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-fundo: #c2fcff;
+            --azul-escuro: #0047AB;
+            --azul-hover: #002D62;
+            --verde: #2e7d32;
+            --vermelho: #d32f2f;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--azul-fundo);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .logo-lista-e {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 120px;
+            z-index: 1000;
+        }
+
+        .container-principal {
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1.titulo-portal {
+            font-size: 24px;
+            color: var(--azul-escuro);
+            margin-bottom: 40px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .btn-menu {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: var(--azul-escuro);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .btn-menu:hover { background: var(--azul-hover); transform: translateY(-2px); }
+
+        .ferramenta-secao { display: none; }
+       
+        .btn-voltar {
+            background: none;
+            border: 1px solid var(--azul-escuro);
+            color: var(--azul-escuro);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .input-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        .btn-acao {
+            width: 100%;
+            background: var(--azul-escuro);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .linha-d { display: flex; gap: 10px; margin-bottom: 10px; }
+        .res-caixa { margin-top: 20px; padding: 20px; border-radius: 20px; display: none; text-align: left; }
+        .negativo { border: 2px solid var(--vermelho); background: #ffebee; }
+        .positivo { border: 2px solid var(--verde); background: #e8f5e9; }
+       
+        .tabela-poupanca div { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+
+        .linha-material { display: flex; gap: 8px; margin-bottom: 10px; background: #fff; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
+        .m-header { display: flex; gap: 10px; font-weight: bold; font-size: 11px; color: var(--azul-escuro); margin-bottom: 5px; text-transform: uppercase; padding: 0 10px;}
+    </style>
+</head>
+<body>
+
+    <img src="lista E.png" alt="Logo" class="logo-lista-e">
+
+    <div class="container-principal">
+       
+        <div id="menu">
+            <h1 class="titulo-portal">Gerir bem o dinheiro é definir melhor o futuro</h1>
+            <button class="btn-menu" onclick="mostrar('calc')">EuroFoco</button>
+            <button class="btn-menu" onclick="mostrar('ia-simples')">Analisador IA</button>
+            <button class="btn-menu" onclick="mostrar('gestor')">Gestor de Orçamento Inteligente</button>
+            <button class="btn-menu" onclick="mostrar('mae')">Calculadora de Venda</button>
+        </div>
+
+        <div id="calc" class="ferramenta-secao">
+            <button class="btn-voltar" onclick="voltar()">← VOLTAR</button>
+            <h2>EuroFoco</h2>
+            <div class="input-box">
+                <label>Rendimento Mensal (€)</label>
+                <input type="number" id="r-calc" placeholder="Ex: 2000">
+                <label>Percentagem Poupança (%)</label>
+                <input type="number" id="p-calc" placeholder="Ex: 10">
+            </div>
+            <button class="btn-acao" onclick="execCalc()">CALCULAR PROJEÇÃO</button>
+            <div id="res-calc" style="margin-top:20px; display:none; text-align: left; background: #f0faff; padding: 20px; border-radius: 20px;">
+                <h3 id="poup-mensal-txt" style="color: var(--azul-escuro); text-align: center;"></h3>
+                <div id="tabela-poup-resultados" class="tabela-poupanca"></div>
+            </div>
+        </div>
+
+        <div id="ia-simples" class="ferramenta-secao">
+            <button class="btn-voltar" onclick="voltar()">← VOLTAR</button>
+            <h2>Analisador IA</h2>
+            <div id="ia-lista">
+                <div class="linha-d">
+                    <input type="text" placeholder="Ex: Netflix, Renda..." class="ia-nome">
+                    <select class="ia-cat">
+                        <option value="essencial">Habitação / Saúde</option>
+                        <option value="essencial">Transporte / Combustível</option>
+                        <option value="essencial">Educação</option>
+                        <option value="desejo">Lazer / Restaurantes</option>
+                        <option value="desejo">Compras / Shopping</option>
+                        <option value="desejo">Assinaturas / Streaming</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="addIA()" style="background:none; border:none; color:var(--azul-escuro); cursor:pointer; font-weight:bold; margin: 10px 0;">+ Adicionar Item</button>
+            <button class="btn-acao" onclick="execIA()">PEDIR VEREDITO</button>
+            <div id="res-ia" style="margin-top:20px;"></div>
+        </div>
+
+        <div id="gestor" class="ferramenta-secao">
+            <button class="btn-voltar" onclick="voltar()">← VOLTAR</button>
+            <h2>Gestor de Orçamento</h2>
+            <div class="input-box">
+                <label>Rendimento Total (€)</label>
+                <input type="number" id="g-renda">
+                <label>Poupança EuroFoco (€)</label>
+                <input type="number" id="g-poup" value="0">
+            </div>
+            <div class="input-box">
+                <label>Despesas</label>
+                <div id="g-lista">
+                    <div class="linha-d">
+                        <input type="text" placeholder="Nome" class="gn">
+                        <input type="number" placeholder="€" class="gv" style="width:80px;">
+                        <select class="gt" style="width:120px;">
+                            <option value="n">Necessidade</option>
+                            <option value="d">Desejo</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="addG()" style="background:none; border:none; color:var(--azul-escuro); cursor:pointer; font-weight:bold; margin-top:10px;">+ Outra Despesa</button>
+            </div>
+            <button class="btn-acao" onclick="execG()">ANALISAR ORÇAMENTO</button>
+            <div id="g-res" class="res-caixa">
+                <h3 id="g-saldo"></h3>
+                <p id="g-msg"></p>
+                <div id="g-compras" style="display:none;"><hr><h4>Pode comprar:</h4><div id="g-opcoes"></div></div>
+                <div id="recibo" style="display:none; margin-top:10px; padding:10px; border:2px dashed var(--azul-escuro); background:white;"></div>
+            </div>
+        </div>
+
+        <div id="mae" class="ferramenta-secao">
+            <button class="btn-voltar" onclick="voltar()">← VOLTAR</button>
+            <h2>Calculadora de Venda</h2>
+            <div class="input-box">
+                <div class="m-header">
+                    <span style="flex:2">Produto</span><span style="flex:1">Qtd Total</span><span style="flex:1">Preço Total</span><span style="flex:1">Usado</span>
+                </div>
+                <div id="m-lista">
+                    <div class="linha-material">
+                        <input type="text" placeholder="Farinha" style="flex:2" class="mn">
+                        <input type="number" placeholder="1000" style="flex:1" class="mqt">
+                        <input type="number" placeholder="1.00" style="flex:1" class="mpt">
+                        <input type="number" placeholder="200" style="flex:1" class="mqu">
+                    </div>
+                </div>
+                <button onclick="addM()" style="background:none; border:none; color:var(--azul-escuro); cursor:pointer; font-weight:bold; margin-top:10px;">+ Adicionar Ingrediente</button>
+            </div>
+            <div class="input-box">
+                <label>Margem de Lucro Desejada (%)</label>
+                <input type="number" id="m-lucro" placeholder="Ex: 100">
+            </div>
+            <button class="btn-acao" onclick="execMae()">CALCULAR PREÇO FINAL</button>
+            <div id="res-mae" class="res-caixa positivo"></div>
+        </div>
+
+    </div>
+
+<script>
+    function mostrar(id) {
+        document.getElementById('menu').style.display = 'none';
+        document.getElementById(id).style.display = 'block';
+    }
+    function voltar() {
+        document.querySelectorAll('.ferramenta-secao').forEach(s => s.style.display = 'none');
+        document.getElementById('menu').style.display = 'block';
+    }
+    function format(v) { return v.toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' }); }
+
+    function execCalc() {
+        const r = parseFloat(document.getElementById('r-calc').value);
+        const p = parseFloat(document.getElementById('p-calc').value);
+        if(isNaN(r) || isNaN(p)) return alert("Preencha os valores!");
+        const m = r * (p/100);
+        document.getElementById('res-calc').style.display = "block";
+        document.getElementById('poup-mensal-txt').innerText = "Poupança Mensal: " + format(m);
+        const periodos = [{t:"5 meses", m:5}, {t:"1 ano", m:12}, {t:"2 anos", m:24}, {t:"5 anos", m:60}, {t:"10 anos", m:120}, {t:"15 anos", m:180}];
+        let html = "";
+        periodos.forEach(i => html += `<div><span>${i.t}</span><b>${format(m*i.m)}</b></div>`);
+        document.getElementById('tabela-poup-resultados').innerHTML = html;
+    }
+
+    function addIA() {
+        const div = document.createElement('div');
+        div.className = 'linha-d';
+        div.innerHTML = `<input type="text" class="ia-nome" placeholder="Item"><select class="ia-cat"><option value="essencial">Habitação / Saúde</option><option value="essencial">Transporte / Combustível</option><option value="essencial">Educação</option><option value="desejo">Lazer / Restaurantes</option><option value="desejo">Compras / Shopping</option><option value="desejo">Assinaturas / Streaming</option></select>`;
+        document.getElementById('ia-lista').appendChild(div);
+    }
+    function execIA() {
+        const n = document.getElementsByClassName('ia-nome');
+        const c = document.getElementsByClassName('ia-cat');
+        let html = "";
+        for(let i=0; i<n.length; i++) {
+            if(n[i].value === "") continue;
+            const cor = (c[i].value === 'essencial') ? '#d4edda' : '#fff3cd';
+            html += `<div style="background:${cor}; padding:10px; margin-bottom:5px; border-radius:10px;"><b>${n[i].value}</b>: ${c[i].value === 'essencial' ? 'Necessidade' : 'Desejo'}</div>`;
+        }
+        document.getElementById('res-ia').innerHTML = html;
+    }
+
+    let saldoG = 0; let listaDG = [];
+    function addG() {
+        const div = document.createElement('div');
+        div.className = 'linha-d';
+        div.innerHTML = `<input type="text" class="gn" placeholder="Nome"><input type="number" class="gv" style="width:80px;"><select class="gt" style="width:120px;"><option value="n">Necessidade</option><option value="d">Desejo</option></select>`;
+        document.getElementById('g-lista').appendChild(div);
+    }
+    function execG() {
+        const r = parseFloat(document.getElementById('g-renda').value) || 0;
+        const p = parseFloat(document.getElementById('g-poup').value) || 0;
+        const n = document.getElementsByClassName('gn'); const v = document.getElementsByClassName('gv'); const t = document.getElementsByClassName('gt');
+        let tn = 0; listaDG = [];
+        for(let i=0; i<n.length; i++) {
+            let val = parseFloat(v[i].value) || 0;
+            if(t[i].value==='n') tn += val; else if(n[i].value!="") listaDG.push({n:n[i].value, v:val});
+        }
+        saldoG = r - tn - p;
+        const c = document.getElementById('g-res'); c.style.display="block";
+        if(saldoG < 0) { c.className="res-caixa negativo"; document.getElementById('g-saldo').innerText=`Saldo: ${format(saldoG)}`; document.getElementById('g-compras').style.display="none"; }
+        else { c.className="res-caixa positivo"; attDG(); }
+    }
+    function attDG() {
+        document.getElementById('g-saldo').innerText = `Sobrou: ${format(saldoG)}`;
+        const div = document.getElementById('g-opcoes'); div.innerHTML = "";
+        let pos = listaDG.filter(d => d.v <= saldoG);
+        if(pos.length > 0) {
+            document.getElementById('g-compras').style.display="block";
+            pos.forEach(d => {
+                let i = document.createElement('div'); i.style="background:white; padding:10px; margin-bottom:5px; border-radius:10px; cursor:pointer; display:flex; justify-content:space-between; border:1px solid #ddd;";
+                i.innerHTML = `<span>${d.n}</span><b>${format(d.v)}</b>`;
+                i.onclick = () => { saldoG -= d.v; listaDG.splice(listaDG.indexOf(d),1); document.getElementById('recibo').style.display="block"; document.getElementById('recibo').innerHTML=`🧾 Comprou ${d.n}. Sobram ${format(saldoG)}`; attDG(); };
+                div.appendChild(i);
+            });
+        } else { document.getElementById('g-compras').style.display="none"; }
+    }
+
+    function addM() {
+        const div = document.createElement('div');
+        div.className = 'linha-material';
+        div.innerHTML = `<input type="text" style="flex:2" class="mn"><input type="number" style="flex:1" class="mqt"><input type="number" style="flex:1" class="mpt"><input type="number" style="flex:1" class="mqu">`;
+        document.getElementById('m-lista').appendChild(div);
+    }
+    function execMae() {
+        const n = document.getElementsByClassName('mn'); const qt = document.getElementsByClassName('mqt'); const pt = document.getElementsByClassName('mpt'); const qu = document.getElementsByClassName('mqu');
+        const lucroPerc = parseFloat(document.getElementById('m-lucro').value) || 0;
+        let custoTotal = 0;
+        for(let i=0; i<n.length; i++) {
+            let qT = parseFloat(qt[i].value) || 0; let pT = parseFloat(pt[i].value) || 0; let qU = parseFloat(qu[i].value) || 0;
+            if(qT > 0) custoTotal += (pT / qT) * qU;
+        }
+        if(custoTotal === 0) return alert("Adicione os materiais!");
+        let lucroVal = custoTotal * (lucroPerc / 100);
+        let precoFinal = custoTotal + lucroVal;
+        const res = document.getElementById('res-mae'); res.style.display = "block";
+        res.innerHTML = `<b>Custo Produção:</b> ${format(custoTotal)}<br><b>Lucro (${lucroPerc}%):</b> ${format(lucroVal)}<hr><b>Preço de Venda: <span style="font-size:20px; color:var(--verde)">${format(precoFinal)}</span></b>`;
+    }
+</script>
+</body>
+</html>
